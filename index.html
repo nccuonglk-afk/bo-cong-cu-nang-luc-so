@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bộ công cụ đánh giá năng lực số học sinh THCS – 15 câu</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#eef6ff,#f8fbff);color:#1f2937}
+.container{max-width:900px;margin:35px auto;padding:20px}
+.card{background:#fff;border-radius:18px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+h1{text-align:center;color:#155e9a;margin:0 0 8px}
+.subtitle{text-align:center;color:#64748b;margin-bottom:25px}
+.question{border:1px solid #dbe5ef;border-radius:14px;padding:18px;margin:16px 0}
+.question h3{margin:0 0 14px;font-size:17px}
+label{display:block;padding:11px 14px;margin:8px 0;border:1px solid #dbe5ef;border-radius:10px;cursor:pointer}
+label:hover{background:#f1f7fd}
+button{display:block;margin:25px auto 0;padding:13px 28px;border:0;border-radius:10px;background:#1565c0;color:#fff;font-size:16px;font-weight:bold;cursor:pointer}
+button:hover{background:#0d4f98}
+#result{display:none;margin-top:25px;padding:22px;border-radius:14px;background:#eef7ff;text-align:center}
+.score{font-size:30px;font-weight:bold;color:#155e9a}
+.note{font-size:14px;color:#64748b;margin-top:8px}
+.student-info{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;padding:18px;background:#f8fbff;border:1px solid #dbe5ef;border-radius:14px}
+.field-label{display:block!important;border:0!important;padding:0!important;margin:0 0 7px!important;font-weight:bold;cursor:default}
+.text-input{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px}
+.text-input:focus{outline:2px solid #bfdbfe;border-color:#60a5fa}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left;margin-top:18px}
+.result-box{background:#fff;border:1px solid #dbe5ef;border-radius:12px;padding:14px}
+.result-box h3{margin:0 0 8px;font-size:16px}
+.result-box ul{margin:6px 0 0 20px;padding:0}
+.solution{margin-top:18px;text-align:left;background:#fff;border-radius:12px;padding:18px;border:1px solid #dbe5ef}
+.solution h3{margin-top:0}
+.solution-item{padding:11px 0;border-bottom:1px solid #e5e7eb}
+.solution-item:last-child{border-bottom:0}
+@media(max-width:650px){.student-info,.result-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="card">
+<h1>BỘ CÔNG CỤ ĐÁNH GIÁ NĂNG LỰC SỐ</h1>
+<div class="subtitle">Dành cho học sinh THCS – 15 câu hỏi tình huống</div>
+<div class="student-info">
+  <div><label class="field-label">Họ và tên học sinh</label><input id="studentName" class="text-input" type="text" placeholder="Nhập họ và tên"></div>
+  <div><label class="field-label">Trường</label><input id="school" class="text-input" type="text" placeholder="Nhập tên trường"></div>
+  <div><label class="field-label">Lớp</label><input id="className" class="text-input" type="text" placeholder="Ví dụ: 7A1"></div>
+  <div><label class="field-label">Ngày thực hiện</label><input id="testDate" class="text-input" type="date"></div>
+</div>
+<p><b>Hướng dẫn:</b> Em hãy chọn phương án phù hợp nhất với cách xử lý của mình.</p>
+<form id="quiz">
+
+<div class="question"><h3>1. Khi tìm một thông tin trên Internet, em nên làm gì trước tiên?</h3>
+<label><input type="radio" name="q1" value="A"> A. Tin ngay thông tin đầu tiên nhìn thấy</label>
+<label><input type="radio" name="q1" value="B"> B. Xem nguồn thông tin và kiểm tra độ tin cậy</label>
+<label><input type="radio" name="q1" value="C"> C. Chọn thông tin có nhiều lượt thích</label></div>
+
+<div class="question"><h3>2. Khi nhận được một tin nhắn hoặc đường link đáng ngờ, em nên làm gì?</h3>
+<label><input type="radio" name="q2" value="A"> A. Bấm vào ngay để xem nội dung</label>
+<label><input type="radio" name="q2" value="B"> B. Kiểm tra người gửi, nội dung và đường link trước khi mở</label>
+<label><input type="radio" name="q2" value="C"> C. Chuyển tiếp cho bạn bè để hỏi</label></div>
+
+<div class="question"><h3>3. Khi sử dụng hình ảnh hoặc tài liệu của người khác cho bài học, em nên làm gì?</h3>
+<label><input type="radio" name="q3" value="A"> A. Dùng tự do vì có trên Internet</label>
+<label><input type="radio" name="q3" value="B"> B. Xóa tên tác giả rồi sử dụng</label>
+<label><input type="radio" name="q3" value="C"> C. Kiểm tra quyền sử dụng và ghi nguồn phù hợp</label></div>
+
+<div class="question"><h3>4. Mật khẩu nào giúp tài khoản an toàn hơn?</h3>
+<label><input type="radio" name="q4" value="A"> A. 123456 hoặc ngày sinh</label>
+<label><input type="radio" name="q4" value="B"> B. Mật khẩu đủ mạnh, khó đoán và không dùng chung cho nhiều tài khoản</label>
+<label><input type="radio" name="q4" value="C"> C. Dùng tên của mình cho dễ nhớ</label></div>
+
+<div class="question"><h3>5. Khi thấy một bài đăng trên mạng có nội dung gây sốc, em nên làm gì?</h3>
+<label><input type="radio" name="q5" value="A"> A. Chia sẻ ngay để mọi người cùng biết</label>
+<label><input type="radio" name="q5" value="B"> B. Kiểm tra thông tin từ nguồn đáng tin cậy trước khi tin hoặc chia sẻ</label>
+<label><input type="radio" name="q5" value="C"> C. Tin vì có nhiều người bình luận</label></div>
+
+<div class="question"><h3>6. Khi làm việc nhóm trực tuyến, cách làm nào phù hợp nhất?</h3>
+<label><input type="radio" name="q6" value="A"> A. Chỉ một người làm toàn bộ</label>
+<label><input type="radio" name="q6" value="B"> B. Phân công nhiệm vụ, trao đổi và cùng chỉnh sửa sản phẩm</label>
+<label><input type="radio" name="q6" value="C"> C. Không cần thống nhất cách làm</label></div>
+
+<div class="question"><h3>7. Khi sử dụng công cụ AI để hỗ trợ học tập, em nên làm gì?</h3>
+<label><input type="radio" name="q7" value="A"> A. Chép nguyên câu trả lời của AI</label>
+<label><input type="radio" name="q7" value="B"> B. Kiểm tra, đối chiếu và tự chịu trách nhiệm về nội dung sử dụng</label>
+<label><input type="radio" name="q7" value="C"> C. Tin AI tuyệt đối vì AI luôn đúng</label></div>
+
+<div class="question"><h3>8. Khi một thông tin trên mạng không ghi rõ tác giả hoặc nguồn, em nên đánh giá thế nào?</h3>
+<label><input type="radio" name="q8" value="A"> A. Chắc chắn là thông tin đúng</label>
+<label><input type="radio" name="q8" value="B"> B. Có thể tin nếu hình ảnh đẹp</label>
+<label><input type="radio" name="q8" value="C"> C. Cần thận trọng và tìm thêm nguồn kiểm chứng</label></div>
+
+<div class="question"><h3>9. Khi phát hiện một tài khoản có dấu hiệu giả mạo người quen, em nên làm gì?</h3>
+<label><input type="radio" name="q9" value="A"> A. Gửi thông tin cá nhân cho tài khoản đó</label>
+<label><input type="radio" name="q9" value="B"> B. Kết bạn để tìm hiểu thêm</label>
+<label><input type="radio" name="q9" value="C"> C. Không cung cấp thông tin và báo cho người lớn/nền tảng khi cần</label></div>
+
+<div class="question"><h3>10. Khi đọc một thông tin có nhiều con số, biểu đồ hoặc hình ảnh, em nên làm gì?</h3>
+<label><input type="radio" name="q10" value="A"> A. Chỉ nhìn tiêu đề</label>
+<label><input type="radio" name="q10" value="B"> B. Kiểm tra nguồn, thời gian và bối cảnh của dữ liệu</label>
+<label><input type="radio" name="q10" value="C"> C. Tin vì có biểu đồ nên chắc chắn chính xác</label></div>
+
+<div class="question"><h3>11. Nếu phát hiện mình đã chia sẻ một thông tin sai, em nên làm gì?</h3>
+<label><input type="radio" name="q11" value="A"> A. Xóa đi và không cần quan tâm</label>
+<label><input type="radio" name="q11" value="B"> B. Đính chính, sửa thông tin và hạn chế để thông tin sai tiếp tục lan truyền</label>
+<label><input type="radio" name="q11" value="C"> C. Tiếp tục chia sẻ để mọi người tự kiểm tra</label></div>
+
+<div class="question"><h3>12. Khi sử dụng thiết bị số ở nơi công cộng, điều nào quan trọng?</h3>
+<label><input type="radio" name="q12" value="A"> A. Để người khác nhìn thấy mật khẩu</label>
+<label><input type="radio" name="q12" value="B"> B. Cho người khác mượn tài khoản nếu họ cần</label>
+<label><input type="radio" name="q12" value="C"> C. Bảo vệ thông tin cá nhân và đăng xuất khỏi tài khoản khi cần</label></div>
+
+<div class="question"><h3>13. Khi gặp hai nguồn thông tin trái ngược nhau, em nên làm gì?</h3>
+<label><input type="radio" name="q13" value="A"> A. Chọn nguồn có tiêu đề hấp dẫn hơn</label>
+<label><input type="radio" name="q13" value="B"> B. So sánh nguồn, bằng chứng và kiểm tra thêm thông tin</label>
+<label><input type="radio" name="q13" value="C"> C. Chọn nguồn có nhiều lượt chia sẻ hơn</label></div>
+
+<div class="question"><h3>14. Khi tạo một sản phẩm số, em nên chú ý điều gì?</h3>
+<label><input type="radio" name="q14" value="A"> A. Nội dung chính xác, phù hợp, có nguồn và tôn trọng bản quyền</label>
+<label><input type="radio" name="q14" value="B"> B. Chỉ cần sản phẩm đẹp</label>
+<label><input type="radio" name="q14" value="C"> C. Có thể lấy nguyên sản phẩm của người khác</label></div>
+
+<div class="question"><h3>15. Theo em, biểu hiện quan trọng của một người có năng lực số là gì?</h3>
+<label><input type="radio" name="q15" value="A"> A. Sử dụng thật nhiều ứng dụng</label>
+<label><input type="radio" name="q15" value="B"> B. Có nhiều tài khoản mạng xã hội</label>
+<label><input type="radio" name="q15" value="C"> C. Biết tìm kiếm, đánh giá, sử dụng và chia sẻ thông tin số một cách an toàn, có trách nhiệm</label></div>
+
+<button type="button" onclick="chamDiem()">NỘP BÀI – XEM KẾT QUẢ</button>
+</form>
+
+<div id="result"></div>
+</div></div>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{document.getElementById("testDate").value=new Date().toISOString().slice(0,10);});
+const answers={q1:"B",q2:"B",q3:"C",q4:"B",q5:"B",q6:"B",q7:"B",q8:"C",q9:"C",q10:"B",q11:"B",q12:"C",q13:"B",q14:"A",q15:"C"};
+
+const skillMap = {
+ q1:["Tìm kiếm và đánh giá thông tin","Tìm kiếm thông tin có mục đích và kiểm tra nguồn trước khi sử dụng."],
+ q2:["An toàn số","Nhận diện đường link/tin nhắn đáng ngờ và kiểm tra trước khi tương tác."],
+ q3:["Bản quyền và sử dụng nội dung số","Biết kiểm tra quyền sử dụng và ghi nguồn khi dùng tài liệu của người khác."],
+ q4:["Bảo mật tài khoản","Tạo mật khẩu mạnh, khó đoán và không dùng chung cho nhiều tài khoản."],
+ q5:["Kiểm chứng thông tin","Không chia sẻ nội dung gây sốc chỉ vì nó đang được lan truyền; cần đối chiếu nguồn tin."],
+ q6:["Hợp tác trong môi trường số","Biết phân công, trao đổi và cùng xây dựng sản phẩm khi làm việc trực tuyến."],
+ q7:["Sử dụng AI có trách nhiệm","Kiểm tra, đối chiếu và chịu trách nhiệm về nội dung nhận được từ AI."],
+ q8:["Đánh giá độ tin cậy của nguồn","Thận trọng với thông tin không rõ tác giả/nguồn và tìm thêm nguồn kiểm chứng."],
+ q9:["Bảo vệ danh tính số","Không cung cấp dữ liệu cá nhân cho tài khoản nghi giả mạo và biết báo cáo khi cần."],
+ q10:["Đọc và phân tích dữ liệu số","Kiểm tra nguồn, thời gian và bối cảnh trước khi kết luận từ số liệu/biểu đồ."],
+ q11:["Trách nhiệm khi chia sẻ thông tin","Biết đính chính và hạn chế sự lan truyền của thông tin sai."],
+ q12:["Bảo vệ dữ liệu cá nhân","Giữ kín thông tin đăng nhập và đăng xuất khi sử dụng thiết bị nơi công cộng."],
+ q13:["Đối chiếu và kiểm chứng","So sánh nguồn, bằng chứng và tìm thêm thông tin khi các nguồn mâu thuẫn."],
+ q14:["Tạo nội dung số có trách nhiệm","Tạo sản phẩm chính xác, phù hợp, có nguồn và tôn trọng bản quyền."],
+ q15:["Năng lực số tổng hợp","Biết tìm kiếm, đánh giá, sử dụng và chia sẻ thông tin số an toàn, có trách nhiệm."]
+};
+
+function getLevel(score){
+ if(score>=13) return ["Tốt","Em có nền tảng năng lực số tốt. Hãy tiếp tục duy trì thói quen kiểm chứng và sử dụng công nghệ có trách nhiệm."];
+ if(score>=10) return ["Khá","Em có nền tảng khá tốt nhưng vẫn nên rèn thêm một số kỹ năng còn yếu."];
+ if(score>=7) return ["Đang phát triển","Em cần luyện tập có mục tiêu ở những năng lực còn hạn chế."];
+ return ["Cần hỗ trợ","Em nên được hướng dẫn từng bước về tìm kiếm, kiểm chứng, bảo mật và sử dụng công nghệ an toàn."];
+}
+
+function chamDiem(){
+ const name=document.getElementById("studentName").value.trim();
+ const school=document.getElementById("school").value.trim();
+ const cls=document.getElementById("className").value.trim();
+ if(!name || !school || !cls){
+   alert("Em hãy điền Họ và tên, Trường và Lớp trước khi nộp bài.");
+   return;
+ }
+
+ let score=0, unanswered=0;
+ let strengths=[], needs=[];
+ for(const q in answers){
+   const chosen=document.querySelector('input[name="'+q+'"]:checked');
+   if(!chosen){unanswered++; needs.push(skillMap[q]); continue;}
+   if(chosen.value===answers[q]){score++; strengths.push(skillMap[q][0]);}
+   else needs.push(skillMap[q]);
+ }
+
+ const [level,summary]=getLevel(score);
+ const uniqueStrengths=[...new Set(strengths)].slice(0,3);
+ const uniqueNeeds=needs.filter((v,i,a)=>a.findIndex(x=>x[0]===v[0])===i).slice(0,4);
+
+ let solutions="";
+ if(uniqueNeeds.length===0){
+   solutions=`<div class="solution-item"><b>Tiếp tục phát triển:</b> Duy trì thói quen kiểm chứng nguồn, bảo vệ dữ liệu cá nhân và sử dụng AI/công nghệ có trách nhiệm.</div>
+   <div class="solution-item"><b>Nhiệm vụ 7 ngày:</b> Mỗi ngày chọn một thông tin trên Internet, xác định nguồn và đối chiếu với ít nhất một nguồn đáng tin cậy.</div>`;
+ } else {
+   solutions=uniqueNeeds.map((x,i)=>`<div class="solution-item"><b>Giải pháp ${i+1} – ${x[0]}:</b> ${x[1]}</div>`).join("");
+   solutions += `<div class="solution-item"><b>Nhiệm vụ 7 ngày:</b> Mỗi ngày luyện một tình huống liên quan đến kỹ năng còn yếu và ghi lại cách em đã xử lý.</div>`;
+ }
+
+ document.getElementById("result").style.display="block";
+ document.getElementById("result").innerHTML=`
+   <div class="score">${score}/15 điểm</div>
+   <h2>Mức độ năng lực số: ${level}</h2>
+   <p><b>${name}</b> – ${cls} – ${school}</p>
+   <p>${summary}</p>
+   ${unanswered?`<p class="note">Có ${unanswered} câu chưa trả lời. Các câu này được xem là nội dung cần tiếp tục rèn luyện.</p>`:""}
+   <div class="result-grid">
+     <div class="result-box"><h3>✅ Điểm mạnh</h3>
+       ${uniqueStrengths.length?`<ul>${uniqueStrengths.map(x=>`<li>${x}</li>`).join("")}</ul>`:"<p>Chưa xác định rõ; em nên tiếp tục luyện tập.</p>"}
+     </div>
+     <div class="result-box"><h3>🎯 Cần cải thiện</h3>
+       ${uniqueNeeds.length?`<ul>${uniqueNeeds.map(x=>`<li>${x[0]}</li>`).join("")}</ul>`:"<p>Không có nội dung nổi bật cần cải thiện.</p>"}
+     </div>
+   </div>
+   <div class="solution">
+     <h3>💡 GIẢI PHÁP RÈN LUYỆN CÁ NHÂN HÓA</h3>
+     ${solutions}
+   </div>
+   <p class="note">Kết quả dùng để định hướng rèn luyện năng lực số, không phải điểm học tập môn học.</p>`;
+ document.getElementById("result").scrollIntoView({behavior:"smooth"});
+}
+</script>
+</body>
+</html>
