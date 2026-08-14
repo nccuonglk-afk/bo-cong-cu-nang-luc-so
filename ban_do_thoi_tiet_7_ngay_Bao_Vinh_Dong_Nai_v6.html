@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bản đồ thời tiết học đường số – Bảo Vinh, Đồng Nai</title>
+<style>
+body{font-family:Arial,sans-serif;background:#eef6fb;margin:0;color:#183247}
+header{background:#1769aa;color:white;padding:24px;text-align:center}
+main{max-width:1100px;margin:auto;padding:18px}
+.card{background:white;border-radius:16px;padding:18px;margin:15px 0;box-shadow:0 3px 12px #0001}
+button{border:0;border-radius:10px;padding:11px 16px;background:#1769aa;color:white;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.day{border:1px solid #d7e3eb;border-radius:14px;padding:14px}
+.good{border-left:7px solid #2e8b57}.watch{border-left:7px solid #e0a000}.bad{border-left:7px solid #d65a31}.high{border-left:7px solid #b3261e}
+.big{font-size:25px;font-weight:bold}.small{font-size:13px;color:#607686}
+input,select{padding:9px;border:1px solid #c8d7e0;border-radius:8px;margin:4px}
+textarea{width:100%;min-height:80px;border:1px solid #c8d7e0;border-radius:8px}
+table{width:100%;border-collapse:collapse}th,td{padding:8px;border:1px solid #d9e3e8;text-align:left}
+</style>
+</head>
+<body>
+<header>
+<h1>🌦️ BẢN ĐỒ THỜI TIẾT HỌC ĐƯỜNG SỐ</h1>
+<h2>Bảo Vinh – Đồng Nai</h2>
+<p>Dự báo 7 ngày • Khuyến nghị thích ứng</p>
+</header>
+<main>
+<div class="card">
+<b>📅 Ngày hiện tại:</b> <span id="today"></span><br>
+<b>🔄 Cập nhật dữ liệu:</b> <span id="updated">Chưa tải</span>
+<button onclick="loadWeather()">🔄 Cập nhật dự báo</button>
+<p class="small">Dữ liệu dự báo được lấy trực tuyến. Công cụ phục vụ học tập, không thay thế cảnh báo khí tượng chính thức.</p>
+</div>
+
+<div class="card">
+<h2>📊 DỰ BÁO 7 NGÀY</h2>
+<div id="forecast" class="grid">Đang tải dữ liệu...</div>
+</div>
+
+<div class="card">
+<h2>🧭 HỌC SINH NÊN LÀM GÌ?</h2>
+<div id="recommendation">Hãy cập nhật dự báo để nhận khuyến nghị.</div>
+</div>
+
+
+<div class="card">
+<h2>💡 KHUYẾN NGHỊ THÍCH ỨNG CHO HỌC SINH</h2>
+<ul>
+<li><b>🌡️ Nắng nóng:</b> ưu tiên nơi thoáng mát, uống nước đều đặn, hạn chế hoạt động ngoài trời vào thời điểm nóng và thực hiện hướng dẫn của nhà trường.</li>
+<li><b>💧 Ăn uống khi trời nóng:</b> ưu tiên nước lọc và các món ăn quen thuộc, đủ chất; có thể bổ sung rau, trái cây và các món có nhiều nước. Hạn chế đồ uống quá nhiều đường hoặc quá nhiều caffeine.</li>
+<li><b>🌧️ Mưa:</b> chuẩn bị đồ dùng phù hợp, kiểm tra lại dự báo trước khi đi học/hoạt động và có phương án dự phòng.</li>
+<li><b>⛈️ Thời tiết bất lợi:</b> không tự ý tiếp tục hoạt động ngoài trời; thực hiện hướng dẫn của giáo viên và nhà trường.</li>
+<li><b>📚 Học tập:</b> chủ động chuẩn bị phương án học tập trong nhà khi hoạt động ngoài trời không thuận lợi.</li>
+<li><b>📱 Công nghệ:</b> xem thời điểm cập nhật, theo dõi 7 ngày và cập nhật lại trước hoạt động.</li>
+</ul>
+<p class="small"><b>Lưu ý:</b> Khuyến nghị ăn uống trong công cụ chỉ mang tính giáo dục sức khỏe chung, không thay thế hướng dẫn của gia đình, nhà trường hoặc chuyên gia y tế.</p>
+</div>
+</main>
+<script>
+const lat=10.944, lon=107.244; // điểm đại diện Bảo Vinh, Đồng Nai – có thể hiệu chỉnh khi chốt tọa độ nghiên cứu
+let forecastData=[];
+document.getElementById("today").textContent=new Date().toLocaleDateString("vi-VN");
+function fmt(d){return new Date(d+"T00:00:00").toLocaleDateString("vi-VN",{weekday:"short",day:"2-digit",month:"2-digit"});}
+function level(t,p,r){
+ if(t>=35 || p>=80 || r>=50)return ["high","🔴 Cảnh báo cao"];
+ if(t>=33 || p>=60 || r>=20)return ["bad","🟠 Bất lợi"];
+ if(t>=31 || p>=40 || r>=5)return ["watch","🟡 Cần chú ý"];
+ return ["good","🟢 Bình thường"];
+}
+function advice(t,p,r){
+ if(t>=35)return "Nắng nóng: ưu tiên không gian mát, uống nước và thực hiện hướng dẫn của nhà trường.";
+ if(p>=80 || r>=50)return "Khả năng mưa cao: chuẩn bị phương án trong nhà và kiểm tra lại dự báo trước hoạt động.";
+ if(t>=33 || p>=60 || r>=20)return "Cần chú ý: theo dõi sát dự báo và chuẩn bị phương án dự phòng.";
+ return "Điều kiện tương đối thuận lợi: vẫn kiểm tra dự báo trước hoạt động.";
+}
+async function loadWeather(){
+ const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=Asia%2FBangkok&forecast_days=7`;
+ try{
+  const x=await fetch(url); const d=await x.json(); forecastData=d.daily.time.map((date,i)=>({date,t:d.daily.temperature_2m_max[i],min:d.daily.temperature_2m_min[i],r:d.daily.precipitation_sum[i],p:d.daily.precipitation_probability_max[i],code:d.daily.weather_code[i]}));
+  document.getElementById("updated").textContent=new Date().toLocaleString("vi-VN");
+  render();
+ }catch(e){document.getElementById("forecast").innerHTML="Không tải được dữ liệu. Hãy kiểm tra Internet và thử lại."}
+}
+function icon(c){if(c===0)return"☀️";if(c<=3)return"⛅";if(c<=48)return"🌫️";if(c<=67)return"🌧️";if(c<=82)return"🌦️";return"⛈️";}
+function render(){
+ document.getElementById("forecast").innerHTML=forecastData.map((x,i)=>{let [cl,lv]=level(x.t,x.p,x.r);return `<div class="day ${cl}"><b>${fmt(x.date)}</b><div class="big">${icon(x.code)} ${x.t.toFixed(0)}°C</div><div>Thấp nhất: ${x.min.toFixed(0)}°C</div><div>🌧️ Mưa: ${x.r.toFixed(1)} mm</div><div>☔ Xác suất: ${x.p}%</div><p><b>${lv}</b></p><div class="small">${advice(x.t,x.p,x.r)}</div></div>`}).join("");
+ let x=forecastData[0];document.getElementById("recommendation").innerHTML="<b>"+advice(x.t,x.p,x.r)+"</b><br>Hãy cập nhật lại trước khi thực hiện hoạt động.";
+}
+loadWeather();
+</script>
+</body>
+</html>
